@@ -6,6 +6,7 @@ import '../data/repositories/credit_card_repository.dart';
 import '../data/repositories/card_invoice_repository.dart';
 import '../data/repositories/user_profile_repository.dart';
 import '../data/repositories/recurring_expense_repository.dart';
+import '../data/repositories/goal_repository.dart';
 import '../domain/models/category.dart';
 import '../domain/models/credit_card.dart';
 import 'database_provider.dart';
@@ -36,6 +37,10 @@ final userProfileRepositoryProvider = Provider<UserProfileRepository>((ref) {
 
 final recurringExpenseRepositoryProvider = Provider<RecurringExpenseRepository>((ref) {
   return RecurringExpenseRepository(ref.watch(databaseProvider));
+});
+
+final goalRepositoryProvider = Provider<GoalRepository>((ref) {
+  return GoalRepository(ref.watch(databaseProvider));
 });
 
 // Providers para listas

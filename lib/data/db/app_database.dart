@@ -72,6 +72,19 @@ class RecurringExpenses extends Table {
   IntColumn get cardId => integer().nullable()(); // Opcional: vincula a um cartão de crédito
 }
 
+// Tabela de objetivos financeiros
+class Goals extends Table {
+  IntColumn get id => integer().autoIncrement()();
+  TextColumn get description => text()(); // Ex: "Comprar uma moto esportiva"
+  RealColumn get minAmount => real()(); // Valor mínimo (ex: 30000 - entrada)
+  RealColumn get maxAmount => real()(); // Valor máximo (ex: 50000 - valor total)
+  TextColumn get targetMonth => text().nullable()(); // YYYY-MM - DEPRECATED, manter para compatibilidade
+  TextColumn get minTargetMonth => text().nullable()(); // YYYY-MM - quando alcançará o valor mínimo
+  TextColumn get maxTargetMonth => text().nullable()(); // YYYY-MM - quando alcançará o valor máximo
+  TextColumn get status => text().withDefault(const Constant('active'))(); // active/completed/cancelled
+  TextColumn get notes => text().nullable()(); // Notas adicionais
+}
+
 @DriftDatabase(tables: [
   SalaryHistory,
   Categories,
@@ -80,12 +93,13 @@ class RecurringExpenses extends Table {
   CardInvoices,
   UserProfile,
   RecurringExpenses,
+  Goals,
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
 
   @override
-  int get schemaVersion => 4;
+  int get schemaVersion => 7;
 
   @override
   MigrationStrategy get migration {
@@ -117,6 +131,43 @@ class AppDatabase extends _$AppDatabase {
         if (from < 4) {
           // Criar tabela de gastos fixos/recorrentes
           await m.createTable(recurringExpenses);
+        }
+        if (from < 5) {
+          // Criar tabela de objetivos financeiros
+          await m.createTable(goals);
+        }
+        if (from < 6) {
+          // Tornar targetMonth nullable (será calculado automaticamente)
+          // Se a tabela já existe (from == 5), precisamos recriá-la com targetMonth nullable
+          if (from == 5) {
+            // Criar tabela temporária com a estrutura correta
+            await m.database.customStatement('''
+              CREATE TABLE goals_new (
+                id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                description TEXT NOT NULL,
+                min_amount REAL NOT NULL,
+                max_amount REAL NOT NULL,
+                target_month TEXT,
+                status TEXT NOT NULL DEFAULT 'active',
+                notes TEXT
+              )
+            ''');
+            // Copiar dados da tabela antiga para a nova
+            await m.database.customStatement('''
+              INSERT INTO goals_new (id, description, min_amount, max_amount, target_month, status, notes)
+              SELECT id, description, min_amount, max_amount, target_month, status, notes FROM goals
+            ''');
+            // Dropar tabela antiga
+            await m.database.customStatement('DROP TABLE goals');
+            // Renomear tabela nova
+            await m.database.customStatement('ALTER TABLE goals_new RENAME TO goals');
+          }
+          // Se from < 5, a tabela será criada na migração from < 5 com targetMonth nullable
+        }
+        if (from < 7) {
+          // Adicionar colunas minTargetMonth e maxTargetMonth
+          await m.addColumn(goals, goals.minTargetMonth);
+          await m.addColumn(goals, goals.maxTargetMonth);
         }
       },
     );

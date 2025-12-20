@@ -2599,6 +2599,577 @@ class RecurringExpensesCompanion extends UpdateCompanion<RecurringExpense> {
   }
 }
 
+class $GoalsTable extends Goals with TableInfo<$GoalsTable, Goal> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $GoalsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _idMeta = const VerificationMeta('id');
+  @override
+  late final GeneratedColumn<int> id = GeneratedColumn<int>(
+    'id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _descriptionMeta = const VerificationMeta(
+    'description',
+  );
+  @override
+  late final GeneratedColumn<String> description = GeneratedColumn<String>(
+    'description',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _minAmountMeta = const VerificationMeta(
+    'minAmount',
+  );
+  @override
+  late final GeneratedColumn<double> minAmount = GeneratedColumn<double>(
+    'min_amount',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _maxAmountMeta = const VerificationMeta(
+    'maxAmount',
+  );
+  @override
+  late final GeneratedColumn<double> maxAmount = GeneratedColumn<double>(
+    'max_amount',
+    aliasedName,
+    false,
+    type: DriftSqlType.double,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _targetMonthMeta = const VerificationMeta(
+    'targetMonth',
+  );
+  @override
+  late final GeneratedColumn<String> targetMonth = GeneratedColumn<String>(
+    'target_month',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _minTargetMonthMeta = const VerificationMeta(
+    'minTargetMonth',
+  );
+  @override
+  late final GeneratedColumn<String> minTargetMonth = GeneratedColumn<String>(
+    'min_target_month',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _maxTargetMonthMeta = const VerificationMeta(
+    'maxTargetMonth',
+  );
+  @override
+  late final GeneratedColumn<String> maxTargetMonth = GeneratedColumn<String>(
+    'max_target_month',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _statusMeta = const VerificationMeta('status');
+  @override
+  late final GeneratedColumn<String> status = GeneratedColumn<String>(
+    'status',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+    defaultValue: const Constant('active'),
+  );
+  static const VerificationMeta _notesMeta = const VerificationMeta('notes');
+  @override
+  late final GeneratedColumn<String> notes = GeneratedColumn<String>(
+    'notes',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  @override
+  List<GeneratedColumn> get $columns => [
+    id,
+    description,
+    minAmount,
+    maxAmount,
+    targetMonth,
+    minTargetMonth,
+    maxTargetMonth,
+    status,
+    notes,
+  ];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'goals';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<Goal> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('id')) {
+      context.handle(_idMeta, id.isAcceptableOrUnknown(data['id']!, _idMeta));
+    }
+    if (data.containsKey('description')) {
+      context.handle(
+        _descriptionMeta,
+        description.isAcceptableOrUnknown(
+          data['description']!,
+          _descriptionMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_descriptionMeta);
+    }
+    if (data.containsKey('min_amount')) {
+      context.handle(
+        _minAmountMeta,
+        minAmount.isAcceptableOrUnknown(data['min_amount']!, _minAmountMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_minAmountMeta);
+    }
+    if (data.containsKey('max_amount')) {
+      context.handle(
+        _maxAmountMeta,
+        maxAmount.isAcceptableOrUnknown(data['max_amount']!, _maxAmountMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_maxAmountMeta);
+    }
+    if (data.containsKey('target_month')) {
+      context.handle(
+        _targetMonthMeta,
+        targetMonth.isAcceptableOrUnknown(
+          data['target_month']!,
+          _targetMonthMeta,
+        ),
+      );
+    }
+    if (data.containsKey('min_target_month')) {
+      context.handle(
+        _minTargetMonthMeta,
+        minTargetMonth.isAcceptableOrUnknown(
+          data['min_target_month']!,
+          _minTargetMonthMeta,
+        ),
+      );
+    }
+    if (data.containsKey('max_target_month')) {
+      context.handle(
+        _maxTargetMonthMeta,
+        maxTargetMonth.isAcceptableOrUnknown(
+          data['max_target_month']!,
+          _maxTargetMonthMeta,
+        ),
+      );
+    }
+    if (data.containsKey('status')) {
+      context.handle(
+        _statusMeta,
+        status.isAcceptableOrUnknown(data['status']!, _statusMeta),
+      );
+    }
+    if (data.containsKey('notes')) {
+      context.handle(
+        _notesMeta,
+        notes.isAcceptableOrUnknown(data['notes']!, _notesMeta),
+      );
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {id};
+  @override
+  Goal map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return Goal(
+      id: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}id'],
+      )!,
+      description: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}description'],
+      )!,
+      minAmount: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}min_amount'],
+      )!,
+      maxAmount: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}max_amount'],
+      )!,
+      targetMonth: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}target_month'],
+      ),
+      minTargetMonth: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}min_target_month'],
+      ),
+      maxTargetMonth: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}max_target_month'],
+      ),
+      status: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}status'],
+      )!,
+      notes: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}notes'],
+      ),
+    );
+  }
+
+  @override
+  $GoalsTable createAlias(String alias) {
+    return $GoalsTable(attachedDatabase, alias);
+  }
+}
+
+class Goal extends DataClass implements Insertable<Goal> {
+  final int id;
+  final String description;
+  final double minAmount;
+  final double maxAmount;
+  final String? targetMonth;
+  final String? minTargetMonth;
+  final String? maxTargetMonth;
+  final String status;
+  final String? notes;
+  const Goal({
+    required this.id,
+    required this.description,
+    required this.minAmount,
+    required this.maxAmount,
+    this.targetMonth,
+    this.minTargetMonth,
+    this.maxTargetMonth,
+    required this.status,
+    this.notes,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['id'] = Variable<int>(id);
+    map['description'] = Variable<String>(description);
+    map['min_amount'] = Variable<double>(minAmount);
+    map['max_amount'] = Variable<double>(maxAmount);
+    if (!nullToAbsent || targetMonth != null) {
+      map['target_month'] = Variable<String>(targetMonth);
+    }
+    if (!nullToAbsent || minTargetMonth != null) {
+      map['min_target_month'] = Variable<String>(minTargetMonth);
+    }
+    if (!nullToAbsent || maxTargetMonth != null) {
+      map['max_target_month'] = Variable<String>(maxTargetMonth);
+    }
+    map['status'] = Variable<String>(status);
+    if (!nullToAbsent || notes != null) {
+      map['notes'] = Variable<String>(notes);
+    }
+    return map;
+  }
+
+  GoalsCompanion toCompanion(bool nullToAbsent) {
+    return GoalsCompanion(
+      id: Value(id),
+      description: Value(description),
+      minAmount: Value(minAmount),
+      maxAmount: Value(maxAmount),
+      targetMonth: targetMonth == null && nullToAbsent
+          ? const Value.absent()
+          : Value(targetMonth),
+      minTargetMonth: minTargetMonth == null && nullToAbsent
+          ? const Value.absent()
+          : Value(minTargetMonth),
+      maxTargetMonth: maxTargetMonth == null && nullToAbsent
+          ? const Value.absent()
+          : Value(maxTargetMonth),
+      status: Value(status),
+      notes: notes == null && nullToAbsent
+          ? const Value.absent()
+          : Value(notes),
+    );
+  }
+
+  factory Goal.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return Goal(
+      id: serializer.fromJson<int>(json['id']),
+      description: serializer.fromJson<String>(json['description']),
+      minAmount: serializer.fromJson<double>(json['minAmount']),
+      maxAmount: serializer.fromJson<double>(json['maxAmount']),
+      targetMonth: serializer.fromJson<String?>(json['targetMonth']),
+      minTargetMonth: serializer.fromJson<String?>(json['minTargetMonth']),
+      maxTargetMonth: serializer.fromJson<String?>(json['maxTargetMonth']),
+      status: serializer.fromJson<String>(json['status']),
+      notes: serializer.fromJson<String?>(json['notes']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'id': serializer.toJson<int>(id),
+      'description': serializer.toJson<String>(description),
+      'minAmount': serializer.toJson<double>(minAmount),
+      'maxAmount': serializer.toJson<double>(maxAmount),
+      'targetMonth': serializer.toJson<String?>(targetMonth),
+      'minTargetMonth': serializer.toJson<String?>(minTargetMonth),
+      'maxTargetMonth': serializer.toJson<String?>(maxTargetMonth),
+      'status': serializer.toJson<String>(status),
+      'notes': serializer.toJson<String?>(notes),
+    };
+  }
+
+  Goal copyWith({
+    int? id,
+    String? description,
+    double? minAmount,
+    double? maxAmount,
+    Value<String?> targetMonth = const Value.absent(),
+    Value<String?> minTargetMonth = const Value.absent(),
+    Value<String?> maxTargetMonth = const Value.absent(),
+    String? status,
+    Value<String?> notes = const Value.absent(),
+  }) => Goal(
+    id: id ?? this.id,
+    description: description ?? this.description,
+    minAmount: minAmount ?? this.minAmount,
+    maxAmount: maxAmount ?? this.maxAmount,
+    targetMonth: targetMonth.present ? targetMonth.value : this.targetMonth,
+    minTargetMonth: minTargetMonth.present
+        ? minTargetMonth.value
+        : this.minTargetMonth,
+    maxTargetMonth: maxTargetMonth.present
+        ? maxTargetMonth.value
+        : this.maxTargetMonth,
+    status: status ?? this.status,
+    notes: notes.present ? notes.value : this.notes,
+  );
+  Goal copyWithCompanion(GoalsCompanion data) {
+    return Goal(
+      id: data.id.present ? data.id.value : this.id,
+      description: data.description.present
+          ? data.description.value
+          : this.description,
+      minAmount: data.minAmount.present ? data.minAmount.value : this.minAmount,
+      maxAmount: data.maxAmount.present ? data.maxAmount.value : this.maxAmount,
+      targetMonth: data.targetMonth.present
+          ? data.targetMonth.value
+          : this.targetMonth,
+      minTargetMonth: data.minTargetMonth.present
+          ? data.minTargetMonth.value
+          : this.minTargetMonth,
+      maxTargetMonth: data.maxTargetMonth.present
+          ? data.maxTargetMonth.value
+          : this.maxTargetMonth,
+      status: data.status.present ? data.status.value : this.status,
+      notes: data.notes.present ? data.notes.value : this.notes,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('Goal(')
+          ..write('id: $id, ')
+          ..write('description: $description, ')
+          ..write('minAmount: $minAmount, ')
+          ..write('maxAmount: $maxAmount, ')
+          ..write('targetMonth: $targetMonth, ')
+          ..write('minTargetMonth: $minTargetMonth, ')
+          ..write('maxTargetMonth: $maxTargetMonth, ')
+          ..write('status: $status, ')
+          ..write('notes: $notes')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(
+    id,
+    description,
+    minAmount,
+    maxAmount,
+    targetMonth,
+    minTargetMonth,
+    maxTargetMonth,
+    status,
+    notes,
+  );
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is Goal &&
+          other.id == this.id &&
+          other.description == this.description &&
+          other.minAmount == this.minAmount &&
+          other.maxAmount == this.maxAmount &&
+          other.targetMonth == this.targetMonth &&
+          other.minTargetMonth == this.minTargetMonth &&
+          other.maxTargetMonth == this.maxTargetMonth &&
+          other.status == this.status &&
+          other.notes == this.notes);
+}
+
+class GoalsCompanion extends UpdateCompanion<Goal> {
+  final Value<int> id;
+  final Value<String> description;
+  final Value<double> minAmount;
+  final Value<double> maxAmount;
+  final Value<String?> targetMonth;
+  final Value<String?> minTargetMonth;
+  final Value<String?> maxTargetMonth;
+  final Value<String> status;
+  final Value<String?> notes;
+  const GoalsCompanion({
+    this.id = const Value.absent(),
+    this.description = const Value.absent(),
+    this.minAmount = const Value.absent(),
+    this.maxAmount = const Value.absent(),
+    this.targetMonth = const Value.absent(),
+    this.minTargetMonth = const Value.absent(),
+    this.maxTargetMonth = const Value.absent(),
+    this.status = const Value.absent(),
+    this.notes = const Value.absent(),
+  });
+  GoalsCompanion.insert({
+    this.id = const Value.absent(),
+    required String description,
+    required double minAmount,
+    required double maxAmount,
+    this.targetMonth = const Value.absent(),
+    this.minTargetMonth = const Value.absent(),
+    this.maxTargetMonth = const Value.absent(),
+    this.status = const Value.absent(),
+    this.notes = const Value.absent(),
+  }) : description = Value(description),
+       minAmount = Value(minAmount),
+       maxAmount = Value(maxAmount);
+  static Insertable<Goal> custom({
+    Expression<int>? id,
+    Expression<String>? description,
+    Expression<double>? minAmount,
+    Expression<double>? maxAmount,
+    Expression<String>? targetMonth,
+    Expression<String>? minTargetMonth,
+    Expression<String>? maxTargetMonth,
+    Expression<String>? status,
+    Expression<String>? notes,
+  }) {
+    return RawValuesInsertable({
+      if (id != null) 'id': id,
+      if (description != null) 'description': description,
+      if (minAmount != null) 'min_amount': minAmount,
+      if (maxAmount != null) 'max_amount': maxAmount,
+      if (targetMonth != null) 'target_month': targetMonth,
+      if (minTargetMonth != null) 'min_target_month': minTargetMonth,
+      if (maxTargetMonth != null) 'max_target_month': maxTargetMonth,
+      if (status != null) 'status': status,
+      if (notes != null) 'notes': notes,
+    });
+  }
+
+  GoalsCompanion copyWith({
+    Value<int>? id,
+    Value<String>? description,
+    Value<double>? minAmount,
+    Value<double>? maxAmount,
+    Value<String?>? targetMonth,
+    Value<String?>? minTargetMonth,
+    Value<String?>? maxTargetMonth,
+    Value<String>? status,
+    Value<String?>? notes,
+  }) {
+    return GoalsCompanion(
+      id: id ?? this.id,
+      description: description ?? this.description,
+      minAmount: minAmount ?? this.minAmount,
+      maxAmount: maxAmount ?? this.maxAmount,
+      targetMonth: targetMonth ?? this.targetMonth,
+      minTargetMonth: minTargetMonth ?? this.minTargetMonth,
+      maxTargetMonth: maxTargetMonth ?? this.maxTargetMonth,
+      status: status ?? this.status,
+      notes: notes ?? this.notes,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (id.present) {
+      map['id'] = Variable<int>(id.value);
+    }
+    if (description.present) {
+      map['description'] = Variable<String>(description.value);
+    }
+    if (minAmount.present) {
+      map['min_amount'] = Variable<double>(minAmount.value);
+    }
+    if (maxAmount.present) {
+      map['max_amount'] = Variable<double>(maxAmount.value);
+    }
+    if (targetMonth.present) {
+      map['target_month'] = Variable<String>(targetMonth.value);
+    }
+    if (minTargetMonth.present) {
+      map['min_target_month'] = Variable<String>(minTargetMonth.value);
+    }
+    if (maxTargetMonth.present) {
+      map['max_target_month'] = Variable<String>(maxTargetMonth.value);
+    }
+    if (status.present) {
+      map['status'] = Variable<String>(status.value);
+    }
+    if (notes.present) {
+      map['notes'] = Variable<String>(notes.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('GoalsCompanion(')
+          ..write('id: $id, ')
+          ..write('description: $description, ')
+          ..write('minAmount: $minAmount, ')
+          ..write('maxAmount: $maxAmount, ')
+          ..write('targetMonth: $targetMonth, ')
+          ..write('minTargetMonth: $minTargetMonth, ')
+          ..write('maxTargetMonth: $maxTargetMonth, ')
+          ..write('status: $status, ')
+          ..write('notes: $notes')
+          ..write(')'))
+        .toString();
+  }
+}
+
 abstract class _$AppDatabase extends GeneratedDatabase {
   _$AppDatabase(QueryExecutor e) : super(e);
   $AppDatabaseManager get managers => $AppDatabaseManager(this);
@@ -2610,6 +3181,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
   late final $UserProfileTable userProfile = $UserProfileTable(this);
   late final $RecurringExpensesTable recurringExpenses =
       $RecurringExpensesTable(this);
+  late final $GoalsTable goals = $GoalsTable(this);
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -2622,6 +3194,7 @@ abstract class _$AppDatabase extends GeneratedDatabase {
     cardInvoices,
     userProfile,
     recurringExpenses,
+    goals,
   ];
 }
 
@@ -4060,6 +4633,277 @@ typedef $$RecurringExpensesTableProcessedTableManager =
       RecurringExpense,
       PrefetchHooks Function()
     >;
+typedef $$GoalsTableCreateCompanionBuilder =
+    GoalsCompanion Function({
+      Value<int> id,
+      required String description,
+      required double minAmount,
+      required double maxAmount,
+      Value<String?> targetMonth,
+      Value<String?> minTargetMonth,
+      Value<String?> maxTargetMonth,
+      Value<String> status,
+      Value<String?> notes,
+    });
+typedef $$GoalsTableUpdateCompanionBuilder =
+    GoalsCompanion Function({
+      Value<int> id,
+      Value<String> description,
+      Value<double> minAmount,
+      Value<double> maxAmount,
+      Value<String?> targetMonth,
+      Value<String?> minTargetMonth,
+      Value<String?> maxTargetMonth,
+      Value<String> status,
+      Value<String?> notes,
+    });
+
+class $$GoalsTableFilterComposer extends Composer<_$AppDatabase, $GoalsTable> {
+  $$GoalsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get minAmount => $composableBuilder(
+    column: $table.minAmount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get maxAmount => $composableBuilder(
+    column: $table.maxAmount,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get targetMonth => $composableBuilder(
+    column: $table.targetMonth,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get minTargetMonth => $composableBuilder(
+    column: $table.minTargetMonth,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get maxTargetMonth => $composableBuilder(
+    column: $table.maxTargetMonth,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get notes => $composableBuilder(
+    column: $table.notes,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$GoalsTableOrderingComposer
+    extends Composer<_$AppDatabase, $GoalsTable> {
+  $$GoalsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get id => $composableBuilder(
+    column: $table.id,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get minAmount => $composableBuilder(
+    column: $table.minAmount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get maxAmount => $composableBuilder(
+    column: $table.maxAmount,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get targetMonth => $composableBuilder(
+    column: $table.targetMonth,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get minTargetMonth => $composableBuilder(
+    column: $table.minTargetMonth,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get maxTargetMonth => $composableBuilder(
+    column: $table.maxTargetMonth,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get status => $composableBuilder(
+    column: $table.status,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get notes => $composableBuilder(
+    column: $table.notes,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$GoalsTableAnnotationComposer
+    extends Composer<_$AppDatabase, $GoalsTable> {
+  $$GoalsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get id =>
+      $composableBuilder(column: $table.id, builder: (column) => column);
+
+  GeneratedColumn<String> get description => $composableBuilder(
+    column: $table.description,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get minAmount =>
+      $composableBuilder(column: $table.minAmount, builder: (column) => column);
+
+  GeneratedColumn<double> get maxAmount =>
+      $composableBuilder(column: $table.maxAmount, builder: (column) => column);
+
+  GeneratedColumn<String> get targetMonth => $composableBuilder(
+    column: $table.targetMonth,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get minTargetMonth => $composableBuilder(
+    column: $table.minTargetMonth,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get maxTargetMonth => $composableBuilder(
+    column: $table.maxTargetMonth,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get status =>
+      $composableBuilder(column: $table.status, builder: (column) => column);
+
+  GeneratedColumn<String> get notes =>
+      $composableBuilder(column: $table.notes, builder: (column) => column);
+}
+
+class $$GoalsTableTableManager
+    extends
+        RootTableManager<
+          _$AppDatabase,
+          $GoalsTable,
+          Goal,
+          $$GoalsTableFilterComposer,
+          $$GoalsTableOrderingComposer,
+          $$GoalsTableAnnotationComposer,
+          $$GoalsTableCreateCompanionBuilder,
+          $$GoalsTableUpdateCompanionBuilder,
+          (Goal, BaseReferences<_$AppDatabase, $GoalsTable, Goal>),
+          Goal,
+          PrefetchHooks Function()
+        > {
+  $$GoalsTableTableManager(_$AppDatabase db, $GoalsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer: () =>
+              $$GoalsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$GoalsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$GoalsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                Value<String> description = const Value.absent(),
+                Value<double> minAmount = const Value.absent(),
+                Value<double> maxAmount = const Value.absent(),
+                Value<String?> targetMonth = const Value.absent(),
+                Value<String?> minTargetMonth = const Value.absent(),
+                Value<String?> maxTargetMonth = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<String?> notes = const Value.absent(),
+              }) => GoalsCompanion(
+                id: id,
+                description: description,
+                minAmount: minAmount,
+                maxAmount: maxAmount,
+                targetMonth: targetMonth,
+                minTargetMonth: minTargetMonth,
+                maxTargetMonth: maxTargetMonth,
+                status: status,
+                notes: notes,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> id = const Value.absent(),
+                required String description,
+                required double minAmount,
+                required double maxAmount,
+                Value<String?> targetMonth = const Value.absent(),
+                Value<String?> minTargetMonth = const Value.absent(),
+                Value<String?> maxTargetMonth = const Value.absent(),
+                Value<String> status = const Value.absent(),
+                Value<String?> notes = const Value.absent(),
+              }) => GoalsCompanion.insert(
+                id: id,
+                description: description,
+                minAmount: minAmount,
+                maxAmount: maxAmount,
+                targetMonth: targetMonth,
+                minTargetMonth: minTargetMonth,
+                maxTargetMonth: maxTargetMonth,
+                status: status,
+                notes: notes,
+              ),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$GoalsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$AppDatabase,
+      $GoalsTable,
+      Goal,
+      $$GoalsTableFilterComposer,
+      $$GoalsTableOrderingComposer,
+      $$GoalsTableAnnotationComposer,
+      $$GoalsTableCreateCompanionBuilder,
+      $$GoalsTableUpdateCompanionBuilder,
+      (Goal, BaseReferences<_$AppDatabase, $GoalsTable, Goal>),
+      Goal,
+      PrefetchHooks Function()
+    >;
 
 class $AppDatabaseManager {
   final _$AppDatabase _db;
@@ -4078,4 +4922,6 @@ class $AppDatabaseManager {
       $$UserProfileTableTableManager(_db, _db.userProfile);
   $$RecurringExpensesTableTableManager get recurringExpenses =>
       $$RecurringExpensesTableTableManager(_db, _db.recurringExpenses);
+  $$GoalsTableTableManager get goals =>
+      $$GoalsTableTableManager(_db, _db.goals);
 }

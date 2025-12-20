@@ -6,6 +6,7 @@ import 'cards_page.dart';
 import 'salary_history_page.dart';
 import 'profile_page.dart';
 import 'recurring_expenses_page.dart';
+import 'goals_page.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
@@ -88,6 +89,21 @@ class SettingsPage extends ConsumerWidget {
                 context,
                 MaterialPageRoute(
                   builder: (_) => const RecurringExpensesPage(),
+                ),
+              );
+            },
+          ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.flag),
+            title: const Text('Meus Objetivos'),
+            subtitle: const Text('Gerenciar objetivos financeiros'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const GoalsPage(),
                 ),
               );
             },
