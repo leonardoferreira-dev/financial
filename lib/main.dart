@@ -26,7 +26,7 @@ class FinancialLFApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Financial LF',
+      title: 'Saldo Futuro',
       theme: AppTheme.lightTheme,
       localizationsDelegates: const [
         GlobalMaterialLocalizations.delegate,
@@ -83,7 +83,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
                   ),
                   const SizedBox(height: 8),
                   const Text(
-                    'Financial LF',
+                    'Saldo Futuro',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 24,

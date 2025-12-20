@@ -1,4 +1,4 @@
-# Financial LF
+# Saldo Futuro
 
 Aplicativo Flutter para planejamento financeiro mensal offline.
 
