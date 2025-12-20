@@ -336,25 +336,28 @@ class _GoalCard extends ConsumerWidget {
                     ),
                   ),
                 if (goal.maxTargetMonth != null)
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.attach_money,
-                        size: 16,
-                        color: Colors.green[700],
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Text(
-                          'Valor máximo em: ${_formatMonth(goal.maxTargetMonth!)}',
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.green[700],
-                            fontWeight: FontWeight.w600,
+                  Padding(
+                    padding: EdgeInsets.only(bottom: goal.minTargetMonth != null ? 0 : 0),
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.attach_money,
+                          size: 16,
+                          color: Colors.green[700],
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            'Valor máximo em: ${_formatMonth(goal.maxTargetMonth!)}',
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.green[700],
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
               ] else
                 Row(
