@@ -72,7 +72,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
               decoration: const BoxDecoration(
                 color: Colors.orange,
               ),
-              child: Column(
+        child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -90,7 +90,7 @@ class _MainNavigationPageState extends State<MainNavigationPage> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  Text(
+            Text(
                     'Planejamento Financeiro',
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.9),

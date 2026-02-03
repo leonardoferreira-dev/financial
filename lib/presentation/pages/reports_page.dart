@@ -8,6 +8,73 @@ final selectedYearProvider = StateProvider<int>((ref) {
   return DateTime.now().year;
 });
 
+// Provider para calcular o saldo acumulado até o final do ano anterior
+final accumulatedBalanceUntilYearProvider = FutureProvider.family<double, int>((ref, year) async {
+  final salaryRepo = ref.watch(salaryRepositoryProvider);
+  final expenseRepo = ref.watch(expenseRepositoryProvider);
+  final invoiceRepo = ref.watch(cardInvoiceRepositoryProvider);
+  final profileRepo = ref.watch(userProfileRepositoryProvider);
+  final recurringExpenseRepo = ref.watch(recurringExpenseRepositoryProvider);
+
+  final profile = await profileRepo.get();
+  final initialBalance = profile?.initialBalance ?? 0.0;
+  
+  // Verificar qual é o primeiro mês com salário
+  final allSalaries = await salaryRepo.getAll();
+  if (allSalaries.isEmpty) return 0.0;
+  
+  final firstSalaryMonth = allSalaries.map((s) => s.startMonth).reduce((a, b) => a.compareTo(b) < 0 ? a : b);
+  final parts = firstSalaryMonth.split('-');
+  final startYear = int.parse(parts[0]);
+  final startMonth = int.parse(parts[1]);
+  
+  // Se o ano selecionado é menor ou igual ao ano inicial, não há acumulado anterior
+  if (year <= startYear) return 0.0;
+  
+  double accumulatedBalance = 0.0;
+  bool initialBalanceAdded = false;
+  
+  // Calcular até o último mês do ano anterior
+  for (int y = startYear; y < year; y++) {
+    final yearMonthStart = y == startYear ? startMonth : 1;
+    
+    for (int month = yearMonthStart; month <= 12; month++) {
+      final monthRef = '${y.toString().padLeft(4, '0')}-${month.toString().padLeft(2, '0')}';
+      
+      final salary = await salaryRepo.getForMonth(monthRef);
+      final salaryAmount = salary?.amount ?? 0.0;
+      
+      final expenses = await expenseRepo.getByMonth(monthRef);
+      final totalExpenses = expenses
+          .where((e) => e.type == 'expense')
+          .fold(0.0, (sum, e) => sum + e.amount);
+      
+      final totalIncome = expenses
+          .where((e) => e.type == 'income')
+          .fold(0.0, (sum, e) => sum + e.amount);
+      
+      final totalRecurringExpenses = await recurringExpenseRepo.getTotalForMonth(monthRef);
+      final totalInvoices = await invoiceRepo.getTotalByMonth(monthRef);
+      
+      final shouldAddInitialBalance = !initialBalanceAdded && monthRef == firstSalaryMonth;
+      if (shouldAddInitialBalance) {
+        initialBalanceAdded = true;
+      }
+      
+      final monthlyBalance = salaryAmount +
+          totalIncome +
+          (shouldAddInitialBalance ? initialBalance : 0.0) -
+          totalExpenses -
+          totalRecurringExpenses -
+          totalInvoices;
+      
+      accumulatedBalance += monthlyBalance;
+    }
+  }
+  
+  return accumulatedBalance;
+});
+
 final monthlyBalanceProvider = FutureProvider.family<List<MonthlyBalance>, int>((ref, year) async {
   final salaryRepo = ref.watch(salaryRepositoryProvider);
   final expenseRepo = ref.watch(expenseRepositoryProvider);
@@ -186,40 +253,116 @@ class ReportsPage extends ConsumerWidget {
                         balancesAsync.when(
                           data: (balances) {
                             final totalYear = balances.last.accumulatedBalance;
-                            return Container(
-                              padding: const EdgeInsets.all(20),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(16),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black.withValues(alpha: 0.1),
-                                    blurRadius: 10,
-                                    offset: const Offset(0, 4),
+                            final previousYearBalanceAsync = ref.watch(accumulatedBalanceUntilYearProvider(selectedYear));
+                            
+                            return previousYearBalanceAsync.when(
+                              data: (previousBalance) {
+                                final totalAccumulated = previousBalance + totalYear;
+                                return Container(
+                                  padding: const EdgeInsets.all(20),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(16),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.black.withValues(alpha: 0.1),
+                                        blurRadius: 10,
+                                        offset: const Offset(0, 4),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
-                              child: Column(
-                                children: [
-                                  Text(
-                                    'Saldo Final do Ano',
-                                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                          color: Colors.grey.shade600,
-                                          fontWeight: FontWeight.w500,
+                                  child: Column(
+                                    children: [
+                                      Text(
+                                        'Saldo Final do Ano',
+                                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                              color: Colors.grey.shade600,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      AmountText(
+                                        amount: totalYear,
+                                        style: const TextStyle(
+                                          fontSize: 32,
+                                          fontWeight: FontWeight.bold,
+                                          letterSpacing: -0.5,
                                         ),
+                                        positiveColor: Colors.green.shade700,
+                                        negativeColor: Colors.red.shade700,
+                                      ),
+                                      if (previousBalance != 0.0) ...[
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          'Acumulado: ${_formatCurrency(totalAccumulated)}',
+                                          style: TextStyle(
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.normal,
+                                            color: Colors.grey.shade500,
+                                          ),
+                                        ),
+                                      ],
+                                    ],
                                   ),
-                                  const SizedBox(height: 8),
-                                  AmountText(
-                                    amount: totalYear,
-                                    style: const TextStyle(
-                                      fontSize: 32,
-                                      fontWeight: FontWeight.bold,
-                                      letterSpacing: -0.5,
+                                );
+                              },
+                              loading: () => Container(
+                                padding: const EdgeInsets.all(20),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      'Saldo Final do Ano',
+                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                            color: Colors.grey.shade600,
+                                            fontWeight: FontWeight.w500,
+                                          ),
                                     ),
-                                    positiveColor: Colors.green.shade700,
-                                    negativeColor: Colors.red.shade700,
-                                  ),
-                                ],
+                                    const SizedBox(height: 8),
+                                    AmountText(
+                                      amount: totalYear,
+                                      style: const TextStyle(
+                                        fontSize: 32,
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: -0.5,
+                                      ),
+                                      positiveColor: Colors.green.shade700,
+                                      negativeColor: Colors.red.shade700,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              error: (_, __) => Container(
+                                padding: const EdgeInsets.all(20),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Text(
+                                      'Saldo Final do Ano',
+                                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                            color: Colors.grey.shade600,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                    ),
+                                    const SizedBox(height: 8),
+                                    AmountText(
+                                      amount: totalYear,
+                                      style: const TextStyle(
+                                        fontSize: 32,
+                                        fontWeight: FontWeight.bold,
+                                        letterSpacing: -0.5,
+                                      ),
+                                      positiveColor: Colors.green.shade700,
+                                      negativeColor: Colors.red.shade700,
+                                    ),
+                                  ],
+                                ),
                               ),
                             );
                           },
@@ -477,6 +620,15 @@ class ReportsPage extends ConsumerWidget {
     final date = DateTime(2024, month);
     final monthName = DateFormat('MMMM', 'pt_BR').format(date);
     return monthName[0].toUpperCase() + monthName.substring(1);
+  }
+
+  String _formatCurrency(double amount) {
+    final formatter = NumberFormat.currency(
+      locale: 'pt_BR',
+      symbol: 'R\$',
+      decimalDigits: 2,
+    );
+    return formatter.format(amount.abs());
   }
 
   Widget _buildDetailRow(
